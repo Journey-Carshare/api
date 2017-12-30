@@ -1,0 +1,40 @@
+{
+  "name": "journey-backend",
+  "version": "0.0.1",
+  "description": "Backend API for the Journey App",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha testing/test.js",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ed-wright/Journey-API.git"
+  },
+  "keywords": [
+    "REST",
+    "RESTful",
+    "API",
+    "NODE",
+    "NodeJS",
+    "MongoDB"
+  ],
+  "author": "Edward Wright",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "nodemon": "^1.14.3"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "jquery": "^3.2.1",
+    "mongoose": "^4.13.7"
+  },
+  "engines": {
+    "node": "8.9.3"
+  },
+  "bugs": {
+    "url": "https://github.com/ed-wright/Journey-API/issues"
+  },
+  "homepage": "https://github.com/ed-wright/Journey-API#readme"
+}
