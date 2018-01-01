@@ -69,3 +69,34 @@ var LoggingSchema = new Schema({
 });
 
 module.exports = mongoose.model('Logs', LoggingSchema);
+
+var GUIDSchema = new Schema({
+  rand64: {
+    type: String,
+    required: 'You are missing id'
+  },
+  hash: {
+      type: String,
+      required: 'you are missing hash'
+  },
+  ip: {
+    type: String
+},
+"acceptEncoding": {
+    type: String
+},
+"acceptLanguage": {
+    type: String
+},
+"userAgent": {
+    type: String
+},
+  timeOpened: {
+    type: Date,
+},
+timezone: {
+  type: Date
+}
+});
+
+module.exports = mongoose.model('Guids', GUIDSchema);
