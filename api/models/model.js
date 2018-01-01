@@ -65,7 +65,10 @@ var LoggingSchema = new Schema({
   },
   ip: {
     type: String
-  }
+},
+guid: {
+    type: String
+}
 });
 
 module.exports = mongoose.model('Logs', LoggingSchema);

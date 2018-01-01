@@ -5,24 +5,28 @@ User = mongoose.model("Users"),
 Log = mongoose.model("Logs"),
 Guid = mongoose.model("Guids");
 
-//Show show_api_info
+//Status: Done
 //log: Done
 exports.show_api_info = function(req, res) {
-    var new_log = new Log({"api_call": "show_api_info", "ip": "test"});
+    var new_log = new Log({"api_call": "show_api_info", "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress});
     new_log.save();
     var json = { message: "api info"};
     res.header("Content-Type", "application/json");
     res.send(JSON.stringify(json, null, 4));
 };
 
-exports.users_requires_authentication = function(req, res) {
-    var new_log = new Log({"api_call": "show_api_info", "ip": "test"});
+//Status: Done
+//log: done
+exports.route_requires_authentication = function(req, res) {
+    var new_log = new Log({"api_call": "route_requires_authentication", "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress);
     new_log.save();
-    var json = { message: "users require authentication"};
+    var json = { message: "Requires authentication"};
     res.header("Content-Type", "application/json");
     res.send(JSON.stringify(json, null, 4));
 };
 
+//Status:
+//log
 exports.guid_get_guid = function(req, res) {
 
     function makeid() {
@@ -48,41 +52,44 @@ exports.guid_get_guid = function(req, res) {
     var new_guid = new Guid(output);
     new_guid.save();
 
-    var new_log = new Log(output);
+    var new_log = new Log("output");
     new_log.save();
 
-    var json = {id: output.rand64};
+    var json = {guid: output.rand64};
     res.header("Content-Type", "application/json");
     res.send(JSON.stringify(json, null, 4));
 };
 
+//Status:
 exports.guid_check_guid = function(req, res) {
 
-    function makeid() {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-_";
-        for (var i = 0; i < 12; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-        return text;
+    if(req.body.guid){
+        var json = {id: false};
+        res.header("Content-Type", "application/json");
+        res.send(JSON.stringify(json, null, 4));
+    } else {
+        var json = {message: "guid must be provided", guid: false};
+        res.header("Content-Type", "application/json");
+        res.send(JSON.stringify(json, null, 4));
     }
+
     var output = {
-        "rand64": makeid(),
         "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress,
         "accept-encoding": req.headers["accept-encoding"] || req.headers.accept-encoding,
         "accept-language": req.headers["accept-language"] || req.headers.accept-language,
-        "user-agent": req.headers["user-agent"] || req.headers.user-agent,
-        timeOpened:new Date(),
-        timezone:(new Date()).getTimezoneOffset()/60,
+        "user-agent": req.headers["user-agent"] || req.headers.user-agent
     }
 
-    var new_log = new Guid(output);
-    new_log.save();
+    output.hash = sha256(output.rand64 + output.ip + output.acceptEncoding + output.acceptLanguage + output.userAgent);
+
+User.find({}, function(err, task) {
 
     var json = {id: output.rand64};
     res.header("Content-Type", "application/json");
     res.send(JSON.stringify(json, null, 4));
 };
 
+//Status:
 exports.create_a_user = function(req, res) {
     var new_task = new User(req.body);
     //Task.find({})  //Search for any existing user
@@ -93,6 +100,7 @@ exports.create_a_user = function(req, res) {
     });
 };
 
+//Status:
 exports.list_all_users = function(req, res) {
     $.getJSON("//freegeoip.net/json/?callback=?", function(data) {
         var new_log = new Log({"api_call": "list_all_users", "ip": data.ip});

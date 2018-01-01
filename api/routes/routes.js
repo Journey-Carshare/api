@@ -23,7 +23,7 @@ module.exports = function(app) {
     .get(journeyBackend.show_api_info);
 
   app.route('/users')
-    .get(journeyBackend.users_requires_authentication)
+    .get(journeyBackend.route_requires_authentication)
     .post(journeyBackend.create_a_user);
 
     app.route('/getGUID')
