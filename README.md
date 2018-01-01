@@ -1,5 +1,4 @@
-# Journey-API
-[![Build Status](https://travis-ci.org/ed-wright/Journey-API.svg?branch=master)](https://travis-ci.org/ed-wright/Journey-API)
+# Journey-API [![Build Status](https://travis-ci.org/ed-wright/Journey-API.svg?branch=master)](https://travis-ci.org/ed-wright/Journey-API)[![Maintainability](https://api.codeclimate.com/v1/badges/d1ac774be485d653fe9a/maintainability)](https://codeclimate.com/github/Journey-Carshare/api/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d1ac774be485d653fe9a/test_coverage)](https://codeclimate.com/github/Journey-Carshare/api/test_coverage)
 ```json
 {
   "api_call": "create_a_user",
