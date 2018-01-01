@@ -1,35 +1,41 @@
-'use strict';
-    var sha256 = require('../../sha256');
-var mongoose = require("mongoose"),
-User = mongoose.model("Users"),
-Log = mongoose.model("Logs"),
-Guid = mongoose.model("Guids");
+"use strict";
+var sha256 = require("../../sha256");
+var mongoose = require("mongoose");
+var User = mongoose.model("Users");
+var Log = mongoose.model("Logs");
+var Guid = mongoose.model("Guids");
+
+function createLog(api_call, req, guid){
+    var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    var new_log = new Log({"api_call": api_call, "ip": ip, "guid": guid});
+    new_log.save();
+}
 
 //Status: Done
 //log: Done
 exports.show_api_info = function(req, res) {
-    var new_log = new Log({"api_call": "show_api_info", "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress});
+    var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    var new_log = new Log({"api_call": "show_api_info", "ip": ip});
     new_log.save();
     var json = { message: "api info"};
-    res.header("Content-Type", "application/json");
     res.send(JSON.stringify(json, null, 4));
 };
 
 //Status: Done
 //log: done
 exports.route_requires_authentication = function(req, res) {
-    var new_log = new Log({"api_call": "route_requires_authentication", "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress);
+    var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    var new_log = new Log({"api_call": "route_requires_authentication", "ip": ip});
     new_log.save();
     var json = { message: "Requires authentication"};
-    res.header("Content-Type", "application/json");
     res.send(JSON.stringify(json, null, 4));
 };
 
 //Status:
 //log
 exports.guid_get_guid = function(req, res) {
-
-    function makeid() {
+    createLog("guid_get_guid", req);
+     function makeid() {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-_";
         for (var i = 0; i < 12; i++)
@@ -52,45 +58,52 @@ exports.guid_get_guid = function(req, res) {
     var new_guid = new Guid(output);
     new_guid.save();
 
-    var new_log = new Log("output");
+    var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    var new_log = new Log({"api_call": "guid_get_guid", "ip": ip});
     new_log.save();
 
     var json = {guid: output.rand64};
-    res.header("Content-Type", "application/json");
     res.send(JSON.stringify(json, null, 4));
 };
 
 //Status:
+//Log: Done
 exports.guid_check_guid = function(req, res) {
-
-    if(req.body.guid){
-        var json = {id: false};
-        res.header("Content-Type", "application/json");
-        res.send(JSON.stringify(json, null, 4));
+    createLog("guid_check_guid", req);
+    if(req.body.guid) {
+        User.count({"guid": req.body.guid}, function(err, task) {
+            if(task === 1){
+                var json = {result: true};
+                res.send(JSON.stringify(json, null, 4));
+            } else {
+                var json = {message: "No matching GUID", result: false};
+                res.send(JSON.stringify(json, null, 4));
+            }
+        });
     } else {
-        var json = {message: "guid must be provided", guid: false};
-        res.header("Content-Type", "application/json");
+        var json = {message: "guid must be provided", result: false};
         res.send(JSON.stringify(json, null, 4));
     }
 
-    var output = {
-        "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress,
-        "accept-encoding": req.headers["accept-encoding"] || req.headers.accept-encoding,
-        "accept-language": req.headers["accept-language"] || req.headers.accept-language,
-        "user-agent": req.headers["user-agent"] || req.headers.user-agent
-    }
-
-    output.hash = sha256(output.rand64 + output.ip + output.acceptEncoding + output.acceptLanguage + output.userAgent);
-
-User.find({}, function(err, task) {
-
-    var json = {id: output.rand64};
-    res.header("Content-Type", "application/json");
-    res.send(JSON.stringify(json, null, 4));
+//     var output = {
+//         "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+//         "accept-encoding": req.headers["accept-encoding"] || req.headers.accept-encoding,
+//         "accept-language": req.headers["accept-language"] || req.headers.accept-language,
+//         "user-agent": req.headers["user-agent"] || req.headers.user-agent
+//     }
+//
+//     output.hash = sha256(output.rand64 + output.ip + output.acceptEncoding + output.acceptLanguage + output.userAgent);
+//
+// //User.find({}, function(err, task) {
+//
+//     var json = {id: output.rand64};
+//
+//     res.send(JSON.stringify(json, null, 4));
 };
 
 //Status:
 exports.create_a_user = function(req, res) {
+    //res.header("Content-Type", "application/json");
     var new_task = new User(req.body);
     //Task.find({})  //Search for any existing user
     new_task.save(function(err, task) {

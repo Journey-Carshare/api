@@ -4,7 +4,7 @@
   "description": "Backend API for the Journey App",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha testing/test.js",
+    "test": "mocha",
     "start": "nodemon server.js"
   },
   "repository": {
@@ -22,6 +22,7 @@
   "author": "Edward Wright",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.1.2",
     "mocha": "^4.0.1",
     "nodemon": "^1.14.3"
   },
