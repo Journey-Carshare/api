@@ -94,3 +94,98 @@ api.postcodes.io/postcodes/HA55NE
     }
 }
 ```
+
+https://vehiclequery.uk/
+
+```
+https://api.vehiclequery.uk/y46wpo
+```
+```json
+{
+  "status": 200,
+  "vrm": "Y46 WPO",
+  "vehicleMake": "RENAULT",
+  "vehicleDescription": "RENAULT CLIO",
+  "taxStatus": "✓ Taxed",
+  "taxDate": "Tax due: 01 March 2018",
+  "motStatus": "✓ MOT",
+  "motDate": "Expires: 03 January 2019",
+  "dateFirstRegistration": "5 June 2001",
+  "yearManufacture": "2001",
+  "cyclinderCapacity": "1149 cc",
+  "co2Emissions": "139 g/km",
+  "fuelType": "PETROL",
+  "exportMarker": "No",
+  "vehicleStatus": "Tax not due",
+  "vehicleColour": "RED",
+  "vehicleTypeApproval": "M1",
+  "wheelplan": "2-AXLE-RIGID BODY",
+  "revenueWeight": "Not available",
+  "motHistory": ["lots of data here"]
+}
+```
+
+# Model Examples
+
+User
+```json
+{
+	"email": "ed.wright@live.co.uk",
+	"password": {
+		"hash": "fjhsjdkhf7yy49tu904u89fhjufg89yuf89",
+		"zxcvbn": 4
+	},
+	"name": {
+		"first": "Edward",
+		"last": "Wright"
+	},
+	"address": {
+		"home": {
+			"postcode": "HA5 5NE",
+			"longitude": "-0.382421123478565",
+			"latitude": "51.5923871777144"
+		},
+		"work": {
+			"location": ["Reading", "Templecombe"],
+            "jobRole": "Software Engineer"
+		}
+	},
+	"phone": "07974909666",
+	"dates": {
+		"createdDate": "insertTimeStamp Here",
+		"lastLogin": "insertTimeStamp Here"
+	},
+	"account": {
+		"rank": ["pending", "activated", "deactivated"],
+		"status": ["standard", "admin"]
+	},
+    "vehicleId": "73854395748393",
+    "profileImage": "./userimages/:id:"
+}
+```
+
+Work locations (JSON/work_locations.json)
+
+Vehicle
+```json
+{
+    "seats": 5,
+	"vrm": "Y46 WPO",
+	"vehicleMake": "RENAULT",
+	"vehicleDescription": "RENAULT CLIO",
+	"taxStatus": true,
+	"taxDate": "01 March 2018",
+	"motStatus": true,
+	"motDate": "03 January 2019",
+	"dateFirstRegistration": "5 June 2001",
+	"yearManufacture": "2001",
+    "vehicleColour": "RED",
+}
+```
+
+journey
+```JSON
+{
+
+}
+```

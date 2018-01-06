@@ -23,11 +23,17 @@ module.exports = function (app) {
     app.route("/")
         .get(journeyBackend.show_api_info);
 
-    app.route("/users")
-        .get(journeyBackend.route_requires_authentication)
-        .post(journeyBackend.create_a_user);
+
 
     app.route("/guid")
         .get(journeyBackend.guid_get_guid)
         .post(journeyBackend.guid_check_guid);
+
+
+//User
+        app.route("/user/create")
+            .post(journeyBackend.create_user);
+
+        app.route("/user/get/:id")
+        .get(journeyBackend.get_user);
 };

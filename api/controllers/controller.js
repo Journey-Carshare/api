@@ -101,17 +101,7 @@ exports.guid_check_guid = function(req, res) {
 //     res.send(JSON.stringify(json, null, 4));
 };
 
-//Status:
-exports.create_a_user = function(req, res) {
-    //res.header("Content-Type", "application/json");
-    var new_task = new User(req.body);
-    //Task.find({})  //Search for any existing user
-    new_task.save(function(err, task) {
-        if (err)
-        res.send(err);
-        res.json({ message: "successfully created user" });
-    });
-};
+
 
 //Status:
 exports.list_all_users = function(req, res) {
@@ -125,6 +115,33 @@ exports.list_all_users = function(req, res) {
         res.json(task);
     });
 };
+
+//Status:
+exports.create_user = function(req, res) {
+    if(req.body.email == undefined || req.body.firstName == undefined || req.body.lastName == undefined ||  req.body.password == undefined || req.body.zxcvbn == undefined || req.body.homePostcode == undefined || req.body.workLocation == undefined){
+        res.json({ message: "Error not enough arguments provided" });
+
+    } else {
+
+        var user;
+        user.name.first = req.body.firstName;
+        var new_task = new User(user);
+        new_task.save(function(err, task) {
+            if (err){
+                res.send(err);
+            }
+            res.json({ message: "successfully created user" });
+        });
+    }
+};
+
+exports.get_user = function(req, res) {
+
+    User.find("id");
+    res.json({ message: req.params.id });
+};
+
+
 
 // exports.list_all_tasks = function(req, res) {
 //     Task.find({}, function(err, task) {

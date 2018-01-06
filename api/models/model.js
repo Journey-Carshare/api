@@ -6,47 +6,87 @@ var UsersSchema = new Schema({
         type: String,
         required: "You are missing the email"
     },
-    first_name: {
-        type: String,
-        required: "You are missing the first name"
-    },
-    last_name: {
-        type: String,
-        required: "You are missing the last name"
+    name: {
+        first: {
+            type: String,
+            required: "You are missing the first name"
+        },
+        last: {
+            type: String,
+            required: "You are missing the last name"
+        }
     },
     password: {
-        type: String,
-        required: "You are missing the password"
+        hash: {
+            type: String,
+            required: "You are missing the password"
+        },
+        zxcvbnClient: {
+            type: Number
+        },
+        zxcvbnServer: {
+            type: Number
+        }
     },
-    postcode: {
-        type: String,
-        required: "You are missing the postcode"
+    address: {
+        home: {
+            postcode: {
+                type: String,
+                required: "You are missing the postcode"
+            },
+            longitude: {
+                type: String
+            },
+            latitude: {
+                type: String
+            }
+        },
+        work: {
+            location: {
+                type: String,
+                enum: ["Reading", "Templecombe"],
+                required: "You are missing your work location"
+            },
+            jobRole: {
+                type: String
+            }
+        }
     },
-    phone_no: {
+    phoneNo: {
         type: String,
         required: "You are missing the phone_no"
     },
-    created_date: {
-        type: Date,
-        default: Date.now
+    dates: {
+        createdDate: {
+            type: Date,
+            default: Date.now
+        },
+        lastLogin: {
+            type: Date,
+            default: Date.now
+        }
     },
-    last_login: {
-        type: Date,
-        default: Date.now
+    account: {
+        status: {
+            type: [{
+                type: String,
+                enum: ["pending", "activated", "deactivated"]
+            }],
+            default: ["pending"]
+        },
+        rank: {
+            type: [{
+                type: String,
+                enum: ["standard", "admin"]
+            }],
+            default: ["standard"]
+        }
     },
-    account_status: {
-        type: [{
-            type: String,
-            enum: ["pending", "activated", "deactivated"]
-        }],
-        default: ["pending"]
+    vehicleId: {
+        type: Number
     },
-    account_rank: {
-        type: [{
-            type: String,
-            enum: ["standard", "admin"]
-        }],
-        default: ["standard"]
+    profileImage: {
+        type: String
     }
 });
 
