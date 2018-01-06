@@ -133,7 +133,8 @@ User
 	"email": "ed.wright@live.co.uk",
 	"password": {
 		"hash": "fjhsjdkhf7yy49tu904u89fhjufg89yuf89",
-		"zxcvbn": 4
+		"zxcvbnClient": 4,
+        "zxcvbnServer": 4
 	},
 	"name": {
 		"first": "Edward",

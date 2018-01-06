@@ -35,7 +35,7 @@ exports.route_requires_authentication = function(req, res) {
 //log
 exports.guid_get_guid = function(req, res) {
     createLog("guid_get_guid", req);
-     function makeid() {
+    function makeid() {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-_";
         for (var i = 0; i < 12; i++)
@@ -85,20 +85,20 @@ exports.guid_check_guid = function(req, res) {
         res.send(JSON.stringify(json, null, 4));
     }
 
-//     var output = {
-//         "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress,
-//         "accept-encoding": req.headers["accept-encoding"] || req.headers.accept-encoding,
-//         "accept-language": req.headers["accept-language"] || req.headers.accept-language,
-//         "user-agent": req.headers["user-agent"] || req.headers.user-agent
-//     }
-//
-//     output.hash = sha256(output.rand64 + output.ip + output.acceptEncoding + output.acceptLanguage + output.userAgent);
-//
-// //User.find({}, function(err, task) {
-//
-//     var json = {id: output.rand64};
-//
-//     res.send(JSON.stringify(json, null, 4));
+    //     var output = {
+    //         "ip": req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+    //         "accept-encoding": req.headers["accept-encoding"] || req.headers.accept-encoding,
+    //         "accept-language": req.headers["accept-language"] || req.headers.accept-language,
+    //         "user-agent": req.headers["user-agent"] || req.headers.user-agent
+    //     }
+    //
+    //     output.hash = sha256(output.rand64 + output.ip + output.acceptEncoding + output.acceptLanguage + output.userAgent);
+    //
+    // //User.find({}, function(err, task) {
+    //
+    //     var json = {id: output.rand64};
+    //
+    //     res.send(JSON.stringify(json, null, 4));
 };
 
 
@@ -118,20 +118,64 @@ exports.list_all_users = function(req, res) {
 
 //Status:
 exports.create_user = function(req, res) {
-    if(req.body.email == undefined || req.body.firstName == undefined || req.body.lastName == undefined ||  req.body.password == undefined || req.body.zxcvbn == undefined || req.body.homePostcode == undefined || req.body.workLocation == undefined){
-        res.json({ message: "Error not enough arguments provided" });
-
+    if(req.body.email === undefined || req.body.firstName === undefined || req.body.lastName === undefined ||  req.body.password === undefined || req.body.zxcvbn === undefined || req.body.homePostcode === undefined || req.body.workLocation === undefined  || req.body.phone === undefined){
+        res.json({ error: "Error not enough arguments provided" , required: ["email", "firstName", "lastName", "password", "zxcvbn", "homePostcode", "workLocation", "phone"]});
     } else {
 
-        var user;
-        user.name.first = req.body.firstName;
-        var new_task = new User(user);
-        new_task.save(function(err, task) {
-            if (err){
-                res.send(err);
+        //Check zxcvbn for overall password strength and clientside and serverside strength
+        var zxcvbn = require("../../node_modules/zxcvbn/dist/zxcvbn.js");
+        var zxcvbnOutput = zxcvbn(req.body.password);
+        if(zxcvbnOutput.score != req.body.zxcvbn || req.body.zxcvbn < 3){
+            res.json({ error: "Password Strength Error"});
+        } else {
+
+            //strengthen Password
+            //this is where you stopped
+            //https://www.npmjs.com/package/argon2
+
+            //Check if user already exists
+            User.find({email : req.body.email}).exec(function(err, docs) {
+            if (docs.length){
+              res.json({ error: "Error user already exists"});
+            } else {
+                //Set up user
+                var user = {
+                    "email": req.body.email,
+                    "name": {
+                        "first": req.body.firstName,
+                        "last": req.body.lastName
+                    },
+                    "password": {
+                        "hash": req.body.password,
+                        "zxcvbnClient": req.body.zxcvbn,
+                        "zxcvbnServer": zxcvbnOutput.score
+                    },
+                    "phoneNo": req.body.phone,
+                    "address": {
+                        "home": {
+                            "postcode": req.body.homePostcode
+                        },
+                        "work": {
+                            "location": req.body.workLocation
+                        }
+                    }
+                };
+                //create new user
+                var new_task = new User(user);
+                new_task.save(function(err) {
+                    if (err){
+                        var output = {
+                            "name": err.name,
+                            "message": err.message
+                        };
+                        res.send(err);
+                    } else {
+                        res.json({ message: "successfully created user" });
+                    }
+                });
             }
-            res.json({ message: "successfully created user" });
-        });
+          });
+        }
     }
 };
 
