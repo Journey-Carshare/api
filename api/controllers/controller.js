@@ -79,6 +79,8 @@ exports.guid_check_guid = function(req, res) {
                 var json = {message: "No matching GUID", result: false};
                 res.send(JSON.stringify(json, null, 4));
             }
+        }).catch(function(err) {
+            res.send(500);
         });
     } else {
         var json = {message: "guid must be provided", result: false};
@@ -116,68 +118,18 @@ exports.list_all_users = function(req, res) {
     });
 };
 
-//Status:
+
+
 exports.create_user = function(req, res) {
-    if(req.body.email === undefined || req.body.firstName === undefined || req.body.lastName === undefined ||  req.body.password === undefined || req.body.zxcvbn === undefined || req.body.homePostcode === undefined || req.body.workLocation === undefined  || req.body.phone === undefined){
-        res.json({ error: "Error not enough arguments provided" , required: ["email", "firstName", "lastName", "password", "zxcvbn", "homePostcode", "workLocation", "phone"]});
-    } else {
-
-        //Check zxcvbn for overall password strength and clientside and serverside strength
-        var zxcvbn = require("../../node_modules/zxcvbn/dist/zxcvbn.js");
-        var zxcvbnOutput = zxcvbn(req.body.password);
-        if(zxcvbnOutput.score != req.body.zxcvbn || req.body.zxcvbn < 3){
-            res.json({ error: "Password Strength Error"});
+     var cu = require("./controllerUser");
+    cu.createUser(req.body, function(err){
+        if(err){
+            return res.json({error: err});
         } else {
-
-            //strengthen Password
-            //this is where you stopped
-            //https://www.npmjs.com/package/argon2
-
-            //Check if user already exists
-            User.find({email : req.body.email}).exec(function(err, docs) {
-            if (docs.length){
-              res.json({ error: "Error user already exists"});
-            } else {
-                //Set up user
-                var user = {
-                    "email": req.body.email,
-                    "name": {
-                        "first": req.body.firstName,
-                        "last": req.body.lastName
-                    },
-                    "password": {
-                        "hash": req.body.password,
-                        "zxcvbnClient": req.body.zxcvbn,
-                        "zxcvbnServer": zxcvbnOutput.score
-                    },
-                    "phoneNo": req.body.phone,
-                    "address": {
-                        "home": {
-                            "postcode": req.body.homePostcode
-                        },
-                        "work": {
-                            "location": req.body.workLocation
-                        }
-                    }
-                };
-                //create new user
-                var new_task = new User(user);
-                new_task.save(function(err) {
-                    if (err){
-                        var output = {
-                            "name": err.name,
-                            "message": err.message
-                        };
-                        res.send(err);
-                    } else {
-                        res.json({ message: "successfully created user" });
-                    }
-                });
-            }
-          });
+            res.json({message: "Succesfully created a new user"});
         }
-    }
-};
+    });
+}
 
 exports.get_user = function(req, res) {
 
