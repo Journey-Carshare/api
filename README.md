@@ -130,38 +130,26 @@ https://api.vehiclequery.uk/y46wpo
 User
 ```json
 {
-	"email": "ed.wright@live.co.uk",
-	"password": {
-		"hash": "fjhsjdkhf7yy49tu904u89fhjufg89yuf89",
-		"zxcvbnClient": 4,
-        "zxcvbnServer": 4
-	},
-	"name": {
-		"first": "Edward",
-		"last": "Wright"
-	},
-	"address": {
-		"home": {
-			"postcode": "HA5 5NE",
-			"longitude": "-0.382421123478565",
-			"latitude": "51.5923871777144"
-		},
-		"work": {
-			"location": ["Reading", "Templecombe"],
-            "jobRole": "Software Engineer"
-		}
-	},
-	"phone": "07974909666",
-	"dates": {
-		"createdDate": "insertTimeStamp Here",
-		"lastLogin": "insertTimeStamp Here"
-	},
-	"account": {
-		"rank": ["pending", "activated", "deactivated"],
-		"status": ["standard", "admin"]
-	},
-    "vehicleId": "73854395748393",
-    "profileImage": "./userimages/:id:"
+	{
+    "$schema" : "http://json-schema.org/draft-04/schema#",
+    "title" : "User Create Schema",
+    "type" : "object",
+    "properties" : {
+        "firstname" : { 
+            "type" : "string"
+        },
+        "lastname" : { 
+            "type" : "string"
+        },
+        "email" : { 
+            "type" : "string"
+        },
+        "password" : { 
+            "type" : "string"
+        }
+    },
+    "required": ["firstname", "lastname", "email", "password"]
+}
 }
 ```
 
@@ -187,6 +175,51 @@ Vehicle
 journey
 ```JSON
 {
-
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Journeys Schema",
+  "type" : "object",
+  "properties" : {
+    "journeyId" : { 
+        "type" : "string"
+    },
+    "start": {
+        "$ref": "#/definitions/address"
+    },
+    "end": {
+        "$ref": "#/definitions/address"
+    },
+    "owner": {
+      "type": "string"  
+    },
+    "members": {
+        "type": "array",
+        "items": {
+            "type": "string"
+        }
+    },
+    "created": {
+        "type": "string"
+    }
+  },
+ "definitions": {
+    "address": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string"
+            },
+            "postcode": {
+                "type": "string"
+            },
+            "latitude": {
+                "type": "string"
+            },
+            "longitude": {
+                "type": "string"
+            }
+        },
+        "required": ["name", "postcode"]
+        }
+    }
 }
 ```
