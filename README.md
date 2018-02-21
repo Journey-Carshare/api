@@ -1,21 +1,115 @@
 # Journey-API [![Build Status](https://travis-ci.org/ed-wright/Journey-API.svg?branch=master)](https://travis-ci.org/ed-wright/Journey-API) [![Maintainability](https://api.codeclimate.com/v1/badges/d1ac774be485d653fe9a/maintainability)](https://codeclimate.com/github/Journey-Carshare/api/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d1ac774be485d653fe9a/test_coverage)](https://codeclimate.com/github/Journey-Carshare/api/test_coverage)
+
+Get Journeys
 ```json
-{
-  "api_call": "create_a_user",
-  "browser_properties": [{
-    "ip":"92.237.104.79",
-    "country_code":"GB",
-    "country_name":"United Kingdom",
-    "region_code":"ENG",
-    "region_name":"England",
-    "city":"Walsall",
-    "zip_code":"WS2",
-    "time_zone":"Europe/London",
-    "latitude":52.6,
-    "longitude":-2,
-    "metro_code":0
-  }]
-}
+[
+    {
+        "userId": "123-456-789",
+        "journeyId": "123-456-789",
+        "event_title": "Journey01",
+        "event_description": "This is my journey",
+        "start_date": "2017-09-03T00:00:00.000Z",
+        "origin": {
+            "name": "Harrow",
+            "postcode": "HA5 5NE",
+            "longitude": -0.382421123478565,
+            "latitude": 51.5923871777144,
+            "incode": "5NE",
+            "outcode": "HA5",
+            "time": "0740"
+        },
+        "destination": {
+            "name": "Reading",
+            "postcode": "RG2 6GF",
+            "longitude": -0.993565768654519,
+            "latitude": 51.4242297606417,
+            "incode": "6GF",
+            "outcode": "RG2",
+            "time": "1600"
+        },
+        "pattern": {
+            "is_journey": true,
+            "is_recurring": true,
+            "is_return": true,
+            "days_of_week": [1,2,4,5]
+        },
+        "members": ["123-456-789", "987-654-321", "456-123-789"]
+	},
+    {
+        "userId": "9897-654-321",
+        "journeyId": "123-456-790",
+        "event_title": "Mad Ting",
+        "event_description": "This is my journey",
+        "start_date": "2017-09-03T00:00:00.000Z",
+        "origin": {
+            "name": "origin2",
+            "postcode": "HA5 5NE",
+            "longitude": -0.382421123478565,
+            "latitude": 51.5923871777144,
+            "incode": "5NE",
+            "outcode": "HA5",
+            "time": "0740"
+        },
+        "destination": {
+            "name": "Reading",
+            "postcode": "RG2 6GF",
+            "longitude": -0.993565768654519,
+            "latitude": 51.4242297606417,
+            "incode": "6GF",
+            "outcode": "RG2",
+            "time": "1600"
+        },
+        "pattern": {
+            "is_journey": true,
+            "is_recurring": true,
+            "is_return": false,
+            "days_of_week": [3]
+        },
+        "members": ["123-456-789", "987-654-321", "456-123-789"]
+    },
+    {
+        "userId": "9897-654-321",
+        "journeyId": "123-456-790",
+        "event_title": "Mad Ting",
+        "event_description": "This is my journey",
+        "start_date": "2018-02-13T00:00:00.000Z",
+        "origin": {
+            "name": "Single Outbound",
+            "postcode": "HA5 5NE",
+            "longitude": -0.382421123478565,
+            "latitude": 51.5923871777144,
+            "incode": "5NE",
+            "outcode": "HA5",
+            "time": "0740"
+        },
+        "destination": {
+            "name": "Single Return",
+            "postcode": "RG2 6GF",
+            "longitude": -0.993565768654519,
+            "latitude": 51.4242297606417,
+            "incode": "6GF",
+            "outcode": "RG2",
+            "time": "1600"
+        },
+        "pattern": {
+            "is_journey": true,
+            "is_recurring": false,
+            "is_return": true
+        },
+        "members": ["123-456-789", "987-654-321", "456-123-789"]
+    },
+    {
+        "userId": "9897-654-321",
+        "journeyId": "123-456-791",
+        "event_title": "No Journey",
+        "event_description": "This is my journey",
+        "start_date": "2018-02-14T00:00:00.000Z",
+        "pattern": {
+            "is_journey": false
+        }
+    }
+]
+
 ```
 
 
